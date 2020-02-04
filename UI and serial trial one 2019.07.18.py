@@ -239,7 +239,7 @@ class startScreen:
         self.frame = ttk.Frame(master)
         self.frame.grid(row=0, column = 0)
         self.frame.config(padding = (10,10,10,10))
-        self.startImg = PhotoImage(file = "startscreen.gif")
+        self.startImg = PhotoImage(file = "Images/startscreen.gif")
         self.label = ttk.Label(self.frame, text = "", image = self.startImg)
         self.label.pack()
         self.button = ttk.Button(self.frame, text = "Connect to device", style = 'Blue.TButton')
@@ -254,7 +254,7 @@ class startScreen:
                 global pEntry
                 pEntry.frame.grid(row = 0, column = 0) #add patient entry screen to master
                 global feet
-                feet.changeInstructions(master, "Entry instructions", "1. Click on the details button, a pop-up will appear.\n2. Enter the TrialNo and patient initials on the pop-up.\n3. Click submit details button", "ins-img.gif" )#change footer instructions
+                feet.changeInstructions(master, "Entry instructions", "1. Click on the details button, a pop-up will appear.\n2. Enter the TrialNo and patient initials on the pop-up.\n3. Click submit details button", "Images/ins-img.gif" )#change footer instructions
                 messagebox.showinfo("Connected", "ES device was found")
             else:
                 messagebox.showerror("Connection error", "The computer could not find device, please check physical connections and re-try device discovery.")
@@ -266,7 +266,7 @@ class footer:
         self.frame.rowconfigure(0, weight =1)
         self.frame.columnconfigure(0, weight =1)
         self.frame.columnconfigure(1, weight =1)
-        self.logo = PhotoImage(file = 'UoP-cropped.gif')
+        self.logo = PhotoImage(file = 'Images/UoP-cropped.gif')
         self.label = ttk.Label(self.frame, image = self.logo, text = "Developed at University of Portsmouth. \n2017-2020 Laura Moody \nVersion 1.0", compound = 'left')
         self.label.img = self.logo
         self.label.config(font = ("Arial", 10))
@@ -281,7 +281,7 @@ class footer:
         self.ask.grid_configure(pady = 0, ipady = 0)
         self.title = "Electroscreen set-up instructions"
         self.lblText = "1. Place your well into the enclave as shown below - do not add anything yet.\n2. Connect your device to the computer via the USB cable.\n3. Press the connect button"
-        self.img = 'ins-img.gif'
+        self.img = 'Images/ins-img.gif'
     
     def changeInstructions(self, master, title, lblText, img):
         self.title = title
@@ -315,7 +315,7 @@ class patientEntry:
     def patientInput(self, master):
         self.window = Toplevel(master)
         self.window.title("Sample details input")
-        self.window.wm_iconbitmap('favicon.ico')
+        self.window.wm_iconbitmap('Images/favicon.ico')
         self.window.resizable(False, False)
         self.window.config(background = 'white')
         self.label3 = ttk.Label(self.window, text = "Please enter the sample details below and click submit when finished. These details are used to generate your file name so it is important to input them correctly")
@@ -373,7 +373,7 @@ class patientEntry:
             self.frame.grid_forget()
             pCheck.frame.grid(row=0, column =0)
             global feet
-            feet.changeInstructions(master, "Check your details", "1. Check the sample details entered are correct and the test parameters meet your expectations. \n2. If the sample details need to be amended use the 're-enter details button.\n3. If the testing details are wrong please find the approriate test, insert into device, and restart the program.\n4. If all details are correct, click the begin testing button.", "ins-img.gif")
+            feet.changeInstructions(master, "Check your details", "1. Check the sample details entered are correct and the test parameters meet your expectations. \n2. If the sample details need to be amended use the 're-enter details button.\n3. If the testing details are wrong please find the approriate test, insert into device, and restart the program.\n4. If all details are correct, click the begin testing button.", "Images/ins-img.gif")
         else:
             messagebox.showerror("Input error","Trial number shows non-digit characters, cannot submit. Please re-try using digits only.")
     
@@ -487,7 +487,7 @@ class setupIns:
     def __init__(self, master, title, lblText, img):
         self.window = Toplevel(master)
         self.window.title(title)
-        self.window.wm_iconbitmap('favicon.ico')
+        self.window.wm_iconbitmap('Images/favicon.ico')
         self.frame = ttk.Frame(self.window)
         self.frame.pack()
         self.label = ttk.Label(self.frame, text = lblText) #"Set-up instructions will be added here."
@@ -647,7 +647,7 @@ def main():
     root.geometry('1000x600' + '+%d+%d' % (widthx, heighty))
     root.title("Electroscreen.meso v1.0")
     root.config(background = 'white')
-    root.wm_iconbitmap('favicon.ico')
+    root.wm_iconbitmap('Images/favicon.ico')
     root.rowconfigure(0, weight =1)
     root.rowconfigure(1, weight =0)
     root.columnconfigure(0, weight =1)

@@ -693,6 +693,7 @@ def main():
     #serial communication
     global arduino
     arduino = esConnection(root)
+    root.mainloop()
 
 main()
 

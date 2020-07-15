@@ -8,8 +8,18 @@
 #define ElectroscreenSerial_h
 
 #include "Arduino.h"
+#include "RfidReader.h"
+#include "Potentiostat.h"
 
 class ElectroscreenSerial
 {
-    //Write code for control here
+    public:
+        //Class methods
+        ElectroscreenSerial();
+        void startComm();
+        bool getRfid(RfidReader rfid);
+        void sendRfid(Potentiostat potentio);
+        void stopComm();
+    private:
+        int _baud;
 }

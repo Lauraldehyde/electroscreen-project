@@ -11,12 +11,12 @@
 class RfidReader
 {
     public:
-        RfidReader(int connection);
+        RfidReader(int connection); //update initiation to include all pins needed for control
         String readRfid(int block);
         int dataBlocks[];
         String results[];
     private:
-        //wiring of pins to be put in
+        //wiring of pins to be put in here
         int _pin;
 
 }

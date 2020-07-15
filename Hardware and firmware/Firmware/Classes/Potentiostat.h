@@ -7,8 +7,28 @@
 #define Potentiostat_h
 
 #include "Arduino.h"
+#include "SyringeControl.h"
 
 class Potentiostat
 {
-    //Write code for control here
-}
+    public:
+        //class functions
+        Potentiostat(int high, int low, int scan, int repeat);
+        void scanCV();
+        int convertVol(int convert);
+        double convertDigital(int convert);
+        void startWash(SyringeControl control);
+
+        //class variables
+        int high;
+        int low;
+        int scan;
+        int repeat;
+
+    private:
+        int _analogPin;
+        int _ouputPin;
+        int _resolution;
+
+
+};

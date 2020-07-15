@@ -7,12 +7,14 @@
 #include "Arduino.h"
 #include "RfidReader.h"
 
-RfidReader::RfidReader(int initialisationParas)
+RfidReader::RfidReader(int connection)
 {
-    //initialisation
+    //initialisation of pins to connection
+    int dataBlocks = [];
+    String results = [];
 }
 
-void RfidReader::Afunction()
+String RfidReader::readRfid(int block)
 {
     //write function
 }

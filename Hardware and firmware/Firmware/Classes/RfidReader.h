@@ -10,5 +10,13 @@
 
 class RfidReader
 {
-    //Write code for control here
+    public:
+        RfidReader(int connection);
+        String readRfid(int block);
+        int dataBlocks[];
+        String results[];
+    private:
+        //wiring of pins to be put in
+        int _pin;
+
 }

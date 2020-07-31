@@ -8,10 +8,10 @@
 #include "SyringeControl.h"
 #include "SyringeDriver.h"
 
-SyringeControl::SyringeControl(int initialisationParas)
+SyringeControl::SyringeControl()
 {
-    int incubations = [];
-    SyringeDriver syringes = [];
+    int incubations [4];
+    SyringeDriver syringes [4];
 }
 
 

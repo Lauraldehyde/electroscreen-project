@@ -18,8 +18,10 @@ class ElectroscreenSerial
         ElectroscreenSerial();
         void startComm();
         bool getRfid(RfidReader rfid);
-        void sendRfid(Potentiostat potentio);
+        void sendRfid();
         void stopComm();
     private:
         int _baud;
-}
+};
+
+#endif

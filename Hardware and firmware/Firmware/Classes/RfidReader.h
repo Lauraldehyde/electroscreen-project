@@ -19,4 +19,6 @@ class RfidReader
         //wiring of pins to be put in here
         int _pin;
 
-}
+};
+
+#endif

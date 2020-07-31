@@ -10,8 +10,8 @@
 RfidReader::RfidReader(int connection)
 {
     //initialisation of pins to connection
-    int dataBlocks = [];
-    String results = [];
+    int dataBlocks [6];
+    String results [6];
 }
 
 String RfidReader::readRfid(int block)

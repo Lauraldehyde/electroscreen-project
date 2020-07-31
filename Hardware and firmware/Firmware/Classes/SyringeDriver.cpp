@@ -13,7 +13,7 @@ SyringeDriver::SyringeDriver()
 
 }
 
-void SyringeDriver::convertToStep(float vol)
+int SyringeDriver::convertToStep(float vol)
 {
     //write function to convert mL or uL to steps of motor needed
 }

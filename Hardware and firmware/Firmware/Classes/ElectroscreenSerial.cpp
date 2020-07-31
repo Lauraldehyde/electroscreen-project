@@ -4,14 +4,19 @@
     University of Portsmouth
 */
 
+
+//Note from 21/07/2020 - not sure this is an essential class may be covered by main.py
 #include "Arduino.h"
 #include "ElectroscreenSerial.h"
 #include "RfidReader.h"
 #include "Potentiostat.h"
 
-ElectroscreenSerial::ElectroscreenSerial(int initialisationParas)
+ElectroscreenSerial::ElectroscreenSerial()
 {
     //initialisation
+    Serial.begin(9600);
+    Serial.println("ElectroscreenSerial communication open");
+    Serial.flush();
 }
 
 void ElectroscreenSerial::startComm()
@@ -24,7 +29,7 @@ bool ElectroscreenSerial::getRfid(RfidReader rfid)
     //try to get information from an Rfid
 }
 
-void ElectroscreenSerial::sendRfid(Potentiostat potentio)
+void ElectroscreenSerial::sendRfid()
 {
     //send Rfid info to serial and potentiostat
 }

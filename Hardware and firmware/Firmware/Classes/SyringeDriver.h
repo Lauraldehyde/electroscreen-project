@@ -27,4 +27,6 @@ class SyringeDriver
         bool power;
     private:
         //put pins and multiplexer channels here
-}
+};
+
+#endif

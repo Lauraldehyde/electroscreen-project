@@ -7,28 +7,53 @@
 #define Potentiostat_h
 
 #include "Arduino.h"
+#include "Potentiostat.h"
 #include "SyringeControl.h"
+#include "ElectroscreenSerial.h"
+#include "Wire.h"
+#include "Adafruit_ADS1015.h"
 
 class Potentiostat
 {
     public:
         //class functions
-        Potentiostat(int high, int low, int scan, int repeat);
+        Potentiostat(int pwmPin);
         void scanCV();
-        int convertVol(int convert);
+        void serialPrint(int digiVal, float voltage, float reference, float current);
+        float readAdc(int channel);
         double convertDigital(int convert);
+        int convertVol(int convert);
+        void setCV(int h, int l, int s, int r);
         void startWash(SyringeControl control);
 
         //class variables
+        int gain[4];
+        adsGain_t adcSettings[6];
+        float oneBitResmV[6];
+        int upLimit[6];
+        int downLimit[6];
         int high;
         int low;
         int scan;
         int repeat;
+        int vol;
+        float current;
+        float voltage;
+        float reference;
+        double res;
+
+        //method variables
+        int16_t adc;
+        float milliVolts;
+        double conv1;
+        double conv2;
+        int conv3;
+        double conv4;
+        int conv5;
 
     private:
-        int _analogPin;
-        int _ouputPin;
-        int _resolution;
-
+        int _pwmPin;
 
 };
+
+#endif

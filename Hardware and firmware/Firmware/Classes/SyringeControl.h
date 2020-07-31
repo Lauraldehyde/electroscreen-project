@@ -19,17 +19,19 @@ class SyringeControl
         void incubate(int minutes);
         void powerOn(SyringeDriver syringe);
         void powerOff(SyringeDriver syringe);
-        bool pushVol(SyringeDriver syringe, float vol);
-        bool pullVol(SyringeDriver syringe, float vol);
-        bool resetPos(SyringeDriver syringe);
-        bool wash(SyringeDriver push, SyringeDriver collect);
+        void pushVol(SyringeDriver syringe, float vol);
+        void pullVol(SyringeDriver syringe, float vol);
+        void resetPos(SyringeDriver syringe);
+        void wash(SyringeDriver push, SyringeDriver collect);
         void preTest();
         void postTest();
 
         //Class variables
-        SyringeDriver[] syringes;
-        static int[] incubations;
+        SyringeDriver syringes [];
+        static int incubations [];
     private:
         //add any pin refs for power management
 
-}
+};
+
+#endif

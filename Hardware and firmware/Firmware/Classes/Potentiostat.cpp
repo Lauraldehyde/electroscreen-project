@@ -12,7 +12,7 @@
 #include "Adafruit_ADS1015.h"
 
 Adafruit_ADS1115 ads;
-double res = 2000.0/255.0;
+float res = 2000.0/255.0;
 int high = -1;
 int low =-1;
 int scan = -1;
@@ -37,6 +37,7 @@ Potentiostat::Potentiostat(int pwmPin)
     _pwmPin = pwmPin;  //Change according to wiring
     TCCR1B = TCCR1B & B11111000 | B00000001;
     pinMode(_pwmPin,OUTPUT);
+    Serial.print("Potentiostat initialised");
 
 }
 
@@ -47,9 +48,11 @@ void Potentiostat::scanCV()
     int val = 0;
     if(repeat >= 1)
     {
+        Serial.println("scanCV starting");
+        Serial.print("Unconverted low:"); Serial.print(low); Serial.print(", unconverted high is:"); Serial.println(high);
+        Serial.print("LOW IS: "); Serial.print(convertVol(low)); Serial.print(", HIGH IS: "); Serial.println(convertVol(high));
         for(val=convertVol(low); val <= convertVol(high); val++)
         {
-            Serial.print("LOW IS: "); Serial.print(convertVol(low)); Serial.print(", HIGH IS: "); Serial.println(convertVol(high));
             analogWrite(_pwmPin, val);
             delay(int(1000.00/(scan/res)));
             voltage = readAdc(0);
@@ -97,16 +100,16 @@ float Potentiostat::readAdc(int channel)
         adc = ads.readADC_SingleEnded(channel);
     }
     float milliVolts = adc * oneBitResmV[(gain[channel])];
+    Serial.print("ADC: "); Serial.println(adc);
     return milliVolts;
 }
 
 int Potentiostat::convertVol(int convert)
 {
     //write function that converts voltage values to digital values
-    int conv3 = convert + 1000;
-    double conv4 = (((double)conv3))/res;
-    int conv5 = round(conv4); 
-    return(conv5);
+    float conv3 = (convert + 1000.00)/(2000.00/255.00);
+    int conv4 = round(conv3); 
+    return(conv4);
 }
 
 double Potentiostat::convertDigital(int convert)
@@ -117,12 +120,13 @@ double Potentiostat::convertDigital(int convert)
     return(conv2);
 }
 
-void setCV(int h, int l, int s, int r)
+void Potentiostat::setCV(int h, int l, int s, int r)
 {
     high = h;
     low = l;
     scan = s;
     repeat = r;
+    Serial.print("High: "); Serial.print(high); Serial.print( ", Low: "); Serial.print(low); Serial.print(", Scan: "); Serial.print(scan); Serial.print(", Repeats: "); Serial.println(repeat);
 }
 
 void Potentiostat::startWash(SyringeControl control)

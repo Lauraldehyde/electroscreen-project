@@ -40,16 +40,15 @@ class Potentiostat
         float current;
         float voltage;
         float reference;
-        double res;
+        float res;
 
         //method variables
         int16_t adc;
         float milliVolts;
         double conv1;
         double conv2;
-        int conv3;
-        double conv4;
-        int conv5;
+        float conv3;
+        int conv4;
 
     private:
         int _pwmPin;

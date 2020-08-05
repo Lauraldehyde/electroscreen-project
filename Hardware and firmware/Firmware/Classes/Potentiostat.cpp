@@ -21,11 +21,12 @@ float current;
 float voltage;
 float reference;
 int _pwmPin;
-int gain[4] = {0,0,0,0};
+volatile int gain[4] = {0,0,0,0};
 adsGain_t adcSettings[6] = {GAIN_TWOTHIRDS, GAIN_ONE, GAIN_TWO, GAIN_FOUR, GAIN_EIGHT, GAIN_SIXTEEN};
 float oneBitResmV[6] = {0.1875, 0.125, 0.0625, 0.03125,0.015625, 0.0078125};
-long upLimit[6] ={40000, 30400, 28800,27200,25600,25600};
-long downLimit[6]= {18667, 13600, 12800, 12480, 11520, -40000};
+long upLimit[6] ={40000, 30000, 30000,30000,30000,30000};
+long downLimit[6]= {3000, 3000, 3000, 3000, 3000, -40000};
+int16_t adc;
 
 Potentiostat::Potentiostat(int pwmPin)
 {
@@ -46,12 +47,13 @@ void Potentiostat::scanCV()
     //set up eror checking to check high low etc have been set correctly
     Serial.println("Digital voltage in, Theorectical voltage in (mV), Measured voltage in (mV), Reference voltage (mV), Current (mA)");
     int val = 0;
+    ads.begin();
     if(repeat >= 1)
     {
         Serial.println("scanCV starting");
         Serial.print("Unconverted low:"); Serial.print(low); Serial.print(", unconverted high is:"); Serial.println(high);
         Serial.print("LOW IS: "); Serial.print(convertVol(low)); Serial.print(", HIGH IS: "); Serial.println(convertVol(high));
-        for(val=convertVol(low); val <= convertVol(high); val++)
+        for(val=convertVol(low); val <= convertVol(high); ++val)
         {
             analogWrite(_pwmPin, val);
             delay(int(1000.00/(scan/res)));
@@ -61,7 +63,7 @@ void Potentiostat::scanCV()
             serialPrint(val, voltage, reference, current);
 
         }
-        for(val = convertVol(high); convertVol(val) >= low; val--)
+        for(val = convertVol(high); convertVol(val) >= low; --val)
         {
             analogWrite(_pwmPin,val); //writes analog PWM value
             delay(1000/(scan/res)); //pauses for delay required to fufill scan rate (ms)
@@ -85,22 +87,34 @@ void Potentiostat::serialPrint(int digitalVal, float voltage, float reference, f
 
 float Potentiostat::readAdc(int channel)
 {
-    int16_t adc;
     adc = ads.readADC_SingleEnded(channel);
-    while (adc < (downLimit[(gain[channel])]))
+    Serial.print("Down limit: "); Serial.println(downLimit[(gain[channel])]);
+    Serial.print("Up limit: "); Serial.println(upLimit[(gain[channel])]);
+    Serial.print("Channel: "); Serial.print(channel); Serial.print("Current gain: "); Serial.print(gain[channel]);
+    if(gain[channel] < 5)
     {
-        gain[channel] += 1;
-        ads.setGain(adcSettings[channel]);
-        adc = ads.readADC_SingleEnded(channel);
+        while (adc < (downLimit[(gain[channel])]))
+        {
+            gain[channel] += 1;
+            ads.setGain(adcSettings[(gain[channel])]);
+            Serial.println(adcSettings[(gain[channel])]);
+            adc = ads.readADC_SingleEnded(channel);
+            Serial.print("Gain: "); Serial.print(gain[channel]); Serial.print(", ADC: "); Serial.print(adc); Serial.print(", Resolution: "); Serial.println(oneBitResmV[(gain[channel])]);
+        }
     }
-    while (adc > (upLimit[(gain[channel])]))
+    if(gain[channel] >= 0)
     {
-        gain[channel] -= 1;
-        ads.setGain(adcSettings[channel]);
-        adc = ads.readADC_SingleEnded(channel);
+    while (adc > (upLimit[(gain[channel])]))
+        {
+            gain[channel] -= 1;
+            ads.setGain(adcSettings[(gain[channel])]);
+            adc = ads.readADC_SingleEnded(channel);
+        }
     }
     float milliVolts = adc * oneBitResmV[(gain[channel])];
-    Serial.print("ADC: "); Serial.println(adc);
+    
+    Serial.print(channel); Serial.print(" ADC: "); Serial.println(adc);
+
     return milliVolts;
 }
 

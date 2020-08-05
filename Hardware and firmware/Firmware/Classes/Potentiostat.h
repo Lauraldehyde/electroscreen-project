@@ -27,7 +27,7 @@ class Potentiostat
         void startWash(SyringeControl control);
 
         //class variables
-        int gain[4];
+        volatile int gain[4];
         adsGain_t adcSettings[6];
         float oneBitResmV[6];
         int upLimit[6];

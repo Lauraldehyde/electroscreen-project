@@ -10,7 +10,6 @@
 #include "ElectroscreenSerial.h"
 #include "Wire.h"
 #include "Adafruit_ADS1015.h"
-#include "unistd.h"
 
 Adafruit_ADS1115 ads;
 float res = 2000.0/255.0;
@@ -28,6 +27,7 @@ float oneBitResmV[6];
 long upLimit[6];
 long downLimit[6];
 int16_t adc;
+unsigned long wait;
 
 Potentiostat::Potentiostat(int pwmPin)
 {
@@ -40,6 +40,7 @@ Potentiostat::Potentiostat(int pwmPin)
     _pwmPin = pwmPin;  //Change according to wiring
     TCCR1B = TCCR1B & B11111000 | B00000001;
     pinMode(_pwmPin,OUTPUT);
+    analogWrite(_pwmPin, 0);
     Serial.print("Potentiostat initialised");
 
 }
@@ -49,6 +50,8 @@ void Potentiostat::scanCV()
     //set up eror checking to check high low etc have been set correctly
     Serial.println("Digital voltage in, Theorectical voltage in (mV), Measured voltage in (mV), Reference voltage (mV), Current (mA)");
     int val = 0;
+    wait = (long)(1000.00/(scan(float)/res));
+    Serial.print("Wait is: "); Serial.println(wait);
     ads.begin();
     if(repeat >= 1)
     {
@@ -58,7 +61,7 @@ void Potentiostat::scanCV()
         for(val=convertVol(low); val <= convertVol(high); ++val)
         {
             analogWrite(_pwmPin, val);
-            sleep(int(1000.00/(scan/res)));
+            delay(wait);
             voltage = readAdc(0);
             reference = readAdc(1);
             current = readAdc(2);
@@ -68,7 +71,7 @@ void Potentiostat::scanCV()
         for(val = convertVol(high); convertVol(val) >= low; --val)
         {
             analogWrite(_pwmPin,val); //writes analog PWM value
-            sleep(int(1000/(scan/res))); //pauses for delay required to fufill scan rate (ms)
+            delay(wait); //pauses for delay required to fufill scan rate (ms)
             voltage = readAdc(0);
             reference = readAdc(1);
             current = readAdc(2);

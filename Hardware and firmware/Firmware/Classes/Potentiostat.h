@@ -12,7 +12,6 @@
 #include "ElectroscreenSerial.h"
 #include "Wire.h"
 #include "Adafruit_ADS1015.h"
-#include "unistd.h"
 
 class Potentiostat
 {
@@ -51,6 +50,7 @@ class Potentiostat
         double conv2;
         float conv3;
         int conv4;
+        unsigned long wait;
 
     private:
         int _pwmPin;

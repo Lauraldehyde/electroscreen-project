@@ -13,8 +13,9 @@ class RfidReader
     public:
         RfidReader(int connection); //update initiation to include all pins needed for control
         String readRfid(int block);
-        int dataBlocks[];
-        String results[];
+        int readBlock(int block);
+        int dataBlocks[6];
+        String results[6];
     private:
         //wiring of pins to be put in here
         int _pin;

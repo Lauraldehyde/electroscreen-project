@@ -12,6 +12,7 @@
 #include "ElectroscreenSerial.h"
 #include "Wire.h"
 #include "Adafruit_ADS1015.h"
+#include "unistd.h"
 
 class Potentiostat
 {
@@ -25,6 +26,7 @@ class Potentiostat
         int convertVol(int convert);
         void setCV(int h, int l, int s, int r);
         void startWash(SyringeControl control);
+        void initArrays();
 
         //class variables
         volatile int gain[4];

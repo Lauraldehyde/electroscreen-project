@@ -31,7 +31,7 @@ String RfidReader::readRfid(int block)
 }
 
 int RfidReader::readBlock(int block){
-  byte len = 18;
+  /*byte len = 18;
   byte buffer1[18];
   char strOut[18];
   int val;
@@ -69,4 +69,5 @@ int RfidReader::readBlock(int block){
   Serial.println(strOut);
   Serial.println(val);
   return val; 
+  */
 }

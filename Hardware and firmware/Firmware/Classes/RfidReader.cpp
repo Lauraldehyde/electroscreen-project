@@ -9,20 +9,28 @@
 #include "SPI.h"
 #include "MFRC522.h"
 
-#define RST_PIN 53
-#define SS_PIN 5
 
-RfidReader::RfidReader(int connection)
+//THese are the pins used for the Mega - to be re-instated once new board arrives
+//#define RST_PIN 53
+//#define SS_PIN 5
+
+//Nano pins for development
+#define SS_PIN 10;
+#define RST_PIN 9;
+
+MFRC522::StatusCode status;
+MFRC522::MIFARE_Key key;
+int dataBlocks [6];
+String results [6];
+
+RfidReader::RfidReader()
 {
     //initialisation of pins to connection
     MFRC522 mfrc522(SS_PIN, RST_PIN);
-    MFRC522::StatusCode status;
-    MFRC522::MIFARE_Key key;
     SPI.begin();
     for (byte i=0; i < 6; i++) key.keyByte[i] = 0xFF;
     boolean a = 0;
-    int dataBlocks [6];
-    String results [6];
+
 }
 
 String RfidReader::readRfid(int block)
@@ -31,7 +39,7 @@ String RfidReader::readRfid(int block)
 }
 
 int RfidReader::readBlock(int block){
-  /*byte len = 18;
+  byte len = 18;
   byte buffer1[18];
   char strOut[18];
   int val;
@@ -69,5 +77,5 @@ int RfidReader::readBlock(int block){
   Serial.println(strOut);
   Serial.println(val);
   return val; 
-  */
+  
 }

@@ -50,7 +50,7 @@ void Potentiostat::scanCV()
     //set up eror checking to check high low etc have been set correctly
     Serial.println("Digital voltage in, Theorectical voltage in (mV), Measured voltage in (mV), Reference voltage (mV), Current (mA)");
     int val = 0;
-    wait = (long)(1000.00/(scan(float)/res));
+    wait = (long)(1000.00/(float(scan)/res));
     Serial.print("Wait is: "); Serial.println(wait);
     ads.begin();
     if(repeat >= 1)

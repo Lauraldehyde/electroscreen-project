@@ -5,8 +5,15 @@
 */
 #ifndef RfidReader_h
 #define RfidReader_h
+//#define RST_PIN 9
+//#define SS_PIN 10
 
 #include "Arduino.h"
+#include "RfidReader.h"
+#include "MFRC522.h"
+#include "SPI.h"
+
+
 
 class RfidReader
 {
@@ -20,7 +27,9 @@ class RfidReader
         int byteReadBlock(int block, byte byteArray[]);
         
         //variables
-        MFRC522 mfrc522(SS_PIN, RST_PIN);
+        const int SS_PIN = 10;
+        const int RST_PIN = 9;
+        MFRC522 mfrc522;
         MFRC522::StatusCode status;
         MFRC522::MIFARE_Key key;
 
@@ -62,7 +71,7 @@ class RfidReader
         byte bufferSize;
         int largestModulo4Number;
         byte trailerBlock;
-        byte status;
+        byte sts;
   
 
     private:

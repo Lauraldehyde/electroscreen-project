@@ -15,9 +15,14 @@
 //#define SS_PIN 5
 
 //Nano pins for development
-#define SS_PIN 10;
-#define RST_PIN 9;
+//#define SS_PIN 10
+//#define RST_PIN 9
 
+//#define RST_PIN 9
+//#define SS_PIN 10
+
+const int SS_PIN = 10;
+const int RST_PIN = 9;
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 MFRC522::StatusCode status;
 MFRC522::MIFARE_Key key;
@@ -112,16 +117,16 @@ int RfidReader::byteReadBlock(int block, byte byteArray[]){
   byte trailerBlock = largestModulo4Number+3;
 
   //Check authentication status
-  byte status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
-  if(status != MFRC522::STATUS_OK){
+  byte sts = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
+  if(sts != MFRC522::STATUS_OK){
     Serial.print("PCD_Authenticate() failed (read): ");
     Serial.println(mfrc522.GetStatusCodeName(status));
     return 3;//return "3" as error message
   }
 
   //Try to read a block
-  status = mfrc522.MIFARE_Read(block, byteArray, &bufferSize);//&buffersize is a pointer to the buffersize variable; MIFARE_Read requires a pointer instead of just a number
-  if (status != MFRC522::STATUS_OK){
+  sts = mfrc522.MIFARE_Read(block, byteArray, &bufferSize);//&buffersize is a pointer to the buffersize variable; MIFARE_Read requires a pointer instead of just a number
+  if (sts != MFRC522::STATUS_OK){
     Serial.print("MIFARE_read() failed: ");
     Serial.println(mfrc522.GetStatusCodeName(status));
     return 4; //4 is returned as an error message

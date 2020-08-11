@@ -33,23 +33,14 @@ class RfidReader
         MFRC522::StatusCode status;
         MFRC522::MIFARE_Key key;
 
-        int batchBlock;
-        int analysisBlock;
-        int cutoffBlock;
-        int highBlock;
-        int lowBlock;
-        int scanBlock;
-        int repeatBlock;
-        int expiryBlock;
-        int bioBlock;
-        int fluidBlock;
+        int batchBlock, analysisBlock, cutoffBlock, highBlock, lowBlock, scanBlock, repeatBlock, expiryBlock, bioBlock, fluidBlock;
         String batch;
         String analysis;
         String cutoff;
-        String high;
-        String low;
-        String scan;
-        String repeat;
+        String rfidHigh;
+        String rfidLow;
+        String rfidScan;
+        String rfidRepeat;
         String expiry;
         String bio;
         String fluid;

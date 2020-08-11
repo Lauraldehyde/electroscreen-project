@@ -8,7 +8,7 @@
 #include "Stepper.h"
 #include "SyringeDriver.h"
 
-#define STEPS 2038
+#define STEPS 2048
 
 //Collision sensors - used as limit sensors here
 const int maxPullPin = 6;
@@ -16,6 +16,14 @@ const int maxPushPin = 7;
 int maxPull;
 int maxPush;
 String limitOutputs[4];
+
+/* Initial motor selected is the 28BYJ-48 with the ULN2003 Motor Driver Board - may be channged
+Initial lead screw used was an 8 mm Diameter 2mm Lead Tr8x2 with a flanged lead nut
+Below are the variable associated with the motor
+*/
+int speed;
+int steps;
+long totalSteps;
 
 SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4)
 {
@@ -28,8 +36,7 @@ SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4)
     Serial.print("maxPush is: "); Serial.println(maxPush);
     Serial.println(limitOutputs[testLimits()]);
     Stepper stepper(STEPS, in1, in2, in3, in4);
-
-
+    speed =1; //The speed is in rotations per minute this is set as an arbitrary until more testing is done max speed advised is
 }
 
 int SyringeDriver::convertToStep(float vol)

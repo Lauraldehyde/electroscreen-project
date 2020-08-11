@@ -30,6 +30,8 @@ class SyringeDriver
         float volPerStep;
         int speed;
         bool power;
+
+        //Variables associated with limit detection
         const int maxPullPin;
         const int maxPushPin;
         int maxPull;

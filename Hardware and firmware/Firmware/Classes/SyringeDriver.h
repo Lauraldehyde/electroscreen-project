@@ -7,6 +7,7 @@
 #define SyringeDriver_h
 
 #include "Arduino.h"
+#include "Stepper.h"
 
 class SyringeDriver
 {
@@ -16,6 +17,7 @@ class SyringeDriver
         int convertToStep(float vol);
         void pushStep(int steps);
         void pullStep(int steps);
+        int testLimits();
         
         //Class variables
         float totalVol;
@@ -25,6 +27,11 @@ class SyringeDriver
         float volPerStep;
         int speed;
         bool power;
+        const int maxPullPin;
+        const int maxPushPin;
+        int maxPull;
+        int maxPush;
+        String limitOutputs[4];
     private:
         //put pins and multiplexer channels here
 };

@@ -9,6 +9,9 @@
 #include "Arduino.h"
 #include "Stepper.h"
 
+#define STEPS 2038
+Stepper stepper;
+
 class SyringeDriver
 {
     public:

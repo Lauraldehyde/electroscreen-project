@@ -8,15 +8,16 @@
 #include "Stepper.h"
 #include "SyringeDriver.h"
 
+#define STEPS 2038
 
-//When collision is detected output = low level ; when switch is released output = high level.
+//Collision sensors - used as limit sensors here
 const int maxPullPin = 6;
 const int maxPushPin = 7;
 int maxPull;
 int maxPush;
 String limitOutputs[4];
 
-SyringeDriver::SyringeDriver()
+SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4)
 {
     limitOutputs[0] = "No limits reached"; limitOutputs[1] = "maxPull limit reached"; limitOutputs[2] = "maxPush limit reached"; limitOutputs[3] = "Error in limit sensors";
     pinMode(maxPullPin, INPUT);
@@ -26,6 +27,7 @@ SyringeDriver::SyringeDriver()
     Serial.print("maxPull is: "); Serial.println(maxPull);
     Serial.print("maxPush is: "); Serial.println(maxPush);
     Serial.println(limitOutputs[testLimits()]);
+    Stepper stepper(STEPS, in1, in2, in3, in4);
 
 
 }

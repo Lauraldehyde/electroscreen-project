@@ -5,19 +5,68 @@
 */
 #ifndef RfidReader_h
 #define RfidReader_h
+//#define RST_PIN 9
+//#define SS_PIN 10
 
 #include "Arduino.h"
+#include "RfidReader.h"
+#include "MFRC522.h"
+#include "SPI.h"
+
+
 
 class RfidReader
 {
     public:
-        RfidReader(int connection); //update initiation to include all pins needed for control
-        String readRfid(int block);
-        int dataBlocks[];
-        String results[];
+        //methods
+        RfidReader(); //update initiation to include all pins needed for control
+        String readRfid();
+        bool getMode();
+        void getRfidData();
+        boolean findCard();
+        int byteReadBlock(int block, byte byteArray[]);
+        
+        //variables
+        const int SS_PIN = 10;
+        const int RST_PIN = 9;
+        MFRC522 mfrc522;
+        MFRC522::StatusCode status;
+        MFRC522::MIFARE_Key key;
+
+        int batchBlock, analysisBlock, cutoffBlock, highBlock, lowBlock, scanBlock, repeatBlock, expiryBlock, bioBlock, fluidBlock;
+        String batch;
+        String analysis;
+        String cutoff;
+        String rfidHigh;
+        String rfidLow;
+        String rfidScan;
+        String rfidRepeat;
+        String expiry;
+        String bio;
+        String fluid;
+        String descriptor[10];
+        byte readBackBlock[18];
+        int blockInt [10];
+        String* parameterOut [10];
+
+        bool mode;
+        char charArray[16];
+        String joinChar = "";
+        String full;
+        int val;
+        int fullInt;
+        String junk;
+        int index;
+        boolean a;
+
+        byte bufferSize;
+        int largestModulo4Number;
+        byte trailerBlock;
+        byte sts;
+  
+
     private:
         //wiring of pins to be put in here
-        int _pin;
 
 };
 

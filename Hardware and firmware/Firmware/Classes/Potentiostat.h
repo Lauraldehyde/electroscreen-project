@@ -25,9 +25,10 @@ class Potentiostat
         int convertVol(int convert);
         void setCV(int h, int l, int s, int r);
         void startWash(SyringeControl control);
+        void initArrays();
 
         //class variables
-        int gain[4];
+        volatile int gain[4];
         adsGain_t adcSettings[6];
         float oneBitResmV[6];
         int upLimit[6];
@@ -49,6 +50,7 @@ class Potentiostat
         double conv2;
         float conv3;
         int conv4;
+        unsigned long wait;
 
     private:
         int _pwmPin;

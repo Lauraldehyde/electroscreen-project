@@ -27,7 +27,7 @@ class SyringeControl
         void postTest();
 
         //Class variables
-        SyringeDriver syringes [];
+        SyringeDriver syringes [5];
         static int incubations [];
     private:
         //add any pin refs for power management

@@ -27,14 +27,11 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);
 MFRC522::StatusCode status;
 MFRC522::MIFARE_Key key;
 int batchBlock, analysisBlock, cutoffBlock,highBlock, lowBlock, scanBlock, repeatBlock, expiryBlock, bioBlock, fluidBlock;
-//String batch = "", analysis = "", cutoff = "", rfidHigh = "", rfidLow = "", rfidScan = "", rfidRepeat = "", expiry = "", bio = "", fluid = "";
 String batch, analysis, cutoff, rfidHigh, rfidLow, rfidScan, rfidRepeat, expiry, bio, fluid;
 String descriptor[10];
 byte readBackBlock[18];
-//int blockInt [] = {batchBlock, analysisBlock, cutoffBlock, highBlock, lowBlock, scanBlock, repeatBlock, expiryBlock, bioBlock, fluidBlock};
 int blockInt[10];
-//String parameterOut [] = {batch,analysis,cutoff,rfidHigh,rfidLow,rfidScan,rfidRepeat,expiry, bio, fluid};
-String parameterOut[10];
+String* parameterOut[10];
 
 
 RfidReader::RfidReader()
@@ -46,9 +43,8 @@ RfidReader::RfidReader()
   blockInt[7]=expiryBlock; blockInt[8]=bioBlock; blockInt[9]=fluidBlock;  
   descriptor[0]= "batch"; descriptor[1] = "analysis"; descriptor[2] = "cutoff"; descriptor[3]="high"; descriptor[4]="low"; descriptor[5] ="scan"; descriptor[6]="repeat";
   descriptor[7]="expiry"; descriptor[8]="biomarker"; descriptor[9]="fluid";
-  parameterOut[0]=batch; parameterOut[1]=analysis; parameterOut[2]=cutoff; parameterOut[3]=rfidHigh; parameterOut[4]=rfidLow; parameterOut[5]=rfidScan; parameterOut[6]=rfidRepeat;
-  parameterOut[7]=expiry; parameterOut[8]=bio; parameterOut[9]=fluidBlock;
-
+  parameterOut[0]=&batch; parameterOut[1]=&analysis; parameterOut[2]=&cutoff; parameterOut[3]=&rfidHigh; parameterOut[4]=&rfidLow; parameterOut[5]=&rfidScan; parameterOut[6]=&rfidRepeat;
+  parameterOut[7]=&expiry; parameterOut[8]=&bio; parameterOut[9]=&fluid;
 }
 
 String RfidReader::readRfid()
@@ -66,10 +62,8 @@ String RfidReader::readRfid()
       }
       for (int u=0; u<16; u++){
         joinChar = joinChar + charArray[u];
-        //Serial.write(charArray[u]); 
       }
-      parameterOut[i] = joinChar;
-      //Serial.flush();
+      *(parameterOut[i]) = joinChar;
     }
     }
 }
@@ -134,8 +128,6 @@ int RfidReader::byteReadBlock(int block, byte byteArray[]){
 
   //Check authentication status
   sts = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid)); 
-  //Serial.print("Status:  "); Serial.println(sts);
-  //Serial.print("MFRC522::STATUS_OK:  "); Serial.print(MFRC522::STATUS_OK);
   if(sts != MFRC522::STATUS_OK){
     Serial.print("PCD_Authenticate() failed (read): ");
     Serial.println(mfrc522.GetStatusCodeName(sts));

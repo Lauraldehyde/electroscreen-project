@@ -47,7 +47,7 @@ class RfidReader
         String descriptor[10];
         byte readBackBlock[18];
         int blockInt [10];
-        String parameterOut [10];
+        String* parameterOut [10];
 
         bool mode;
         char charArray[16];

@@ -24,6 +24,12 @@ Below are the variable associated with the motor
 int speed;
 int steps;
 long totalSteps;
+int screwPitch;
+int syringeVol;
+int syringeExtension;
+float volPerMilimetre;
+float distancePerStep;
+float volPerStep;
 
 SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4)
 {
@@ -37,6 +43,18 @@ SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4)
     Serial.println(limitOutputs[testLimits()]);
     Stepper stepper(STEPS, in1, in2, in3, in4);
     speed =1; //The speed is in rotations per minute this is set as an arbitrary until more testing is done max speed advised is
+    screwPitch = 2;
+}
+
+void SyringeDriver::setSyringe(int vol, int extension)
+{
+    syringeVol = vol;
+    syringeExtension = extension;
+    volPerMilimetre = vol/extension;
+    distancePerStep = screwPitch/STEPS;
+    volPerStep = distancePerStep * volPerMilimetre;
+
+
 }
 
 int SyringeDriver::convertToStep(float vol)

@@ -11,7 +11,7 @@
 SyringeControl::SyringeControl()
 {
     int incubations [4];
-    SyringeDriver syringes [5];
+    SyringeDriver* syringes [5];
 }
 
 

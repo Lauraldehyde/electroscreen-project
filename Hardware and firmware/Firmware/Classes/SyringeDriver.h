@@ -10,16 +10,16 @@
 #include "Stepper.h"
 
 #define STEPS 2038
-Stepper stepper;
+
 
 class SyringeDriver
 {
     public:
         //Class methods
-        SyringeDriver();
+        SyringeDriver(int in1, int in2, int in3, int in4);
+        void setSyringe(int vol, int extension);
         int convertToStep(float vol);
-        void pushStep(int steps);
-        void pullStep(int steps);
+        void rotateStep(int step);
         int testLimits();
         
         //Class variables
@@ -30,6 +30,7 @@ class SyringeDriver
         float volPerStep;
         int speed;
         bool power;
+        Stepper *motorReference;
 
         //Variables associated with limit detection
         const int maxPullPin;

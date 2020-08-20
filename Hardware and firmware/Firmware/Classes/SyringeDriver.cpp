@@ -30,6 +30,7 @@ int syringeExtension;
 float volPerMilimetre;
 float distancePerStep;
 float volPerStep;
+Stepper *motorReference;
 
 SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4)
 {
@@ -41,8 +42,9 @@ SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4)
     Serial.print("maxPull is: "); Serial.println(maxPull);
     Serial.print("maxPush is: "); Serial.println(maxPush);
     Serial.println(limitOutputs[testLimits()]);
-    Stepper stepper(STEPS, in1, in2, in3, in4);
-    speed =1; //The speed is in rotations per minute this is set as an arbitrary until more testing is done max speed advised is
+    Stepper myStepper(STEPS, in1, in2, in3, in4);
+    motorReference = &myStepper;
+    speed =10; //The speed is in rotations per minute this is set as an arbitrary until more testing is done max speed advised is
     screwPitch = 2;
 }
 
@@ -53,23 +55,43 @@ void SyringeDriver::setSyringe(int vol, int extension)
     volPerMilimetre = vol/extension;
     distancePerStep = screwPitch/STEPS;
     volPerStep = distancePerStep * volPerMilimetre;
-
-
 }
 
 int SyringeDriver::convertToStep(float vol)
 {
-    //write function to convert mL or uL to steps of motor needed
+    int stepsOut = round(vol*volPerStep);
+    return stepsOut;
 }
 
-void SyringeDriver::pushStep(int steps)
-{
-    //write function to rotate motor the steps specified in the push direction
-}
 
-void SyringeDriver::pullStep(int steps)
+void SyringeDriver::rotateStep(int stepInt)
 {
     //write function to rotate motor the steps specified in the pull direction
+    int interval =  1;
+    if (stepInt > 0)
+    {
+        for (int s = 0; s < stepInt; s ++)
+        {
+            if(testLimits() == 1)
+            {
+                (*motorReference).step(interval);
+            }else{
+                break;
+            }            
+        }
+    }
+    if (stepInt < 0)
+    {
+        for (int s =0; s > stepInt; s--)
+        {
+            if(testLimits() == 1)
+            {
+                (*motorReference).step(-1 *interval);
+            }else{
+                break;
+            }
+        }
+    }
 }
 
 int SyringeDriver::testLimits()
@@ -89,11 +111,14 @@ int SyringeDriver::testLimits()
    } else if (maxPull == 0 && maxPush == 1)
    {
        return 1;
+       
    } else if (maxPull == 1 && maxPush == 0)
    {
-       return 2;
+       Serial.println("Push limit reached.");
+       return 2;       
    } else
    {
+       Serial.println("Pull limit reached");
        return 3;
    }
 }

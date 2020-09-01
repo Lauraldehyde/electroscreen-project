@@ -33,8 +33,8 @@ class SyringeDriver
         Stepper *motorReference;
 
         //Variables associated with limit detection
-        const int maxPullPin;
-        const int maxPushPin;
+        int maxPullPin;
+        int maxPushPin;
         int maxPull;
         int maxPush;
         String limitOutputs[4];

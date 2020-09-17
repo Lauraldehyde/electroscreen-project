@@ -8,7 +8,7 @@
 #include "Stepper.h"
 #include "SyringeDriver.h"
 
-#define STEPS 2048
+#define STEPS 2038
 
 //Collision sensors - used as limit sensors here
 int maxPullPin;
@@ -32,10 +32,10 @@ Stepper *motorReference;
 int maxPull;
 int maxPush;
 
-SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4)
+SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4, int limit1, int limit2)
 {
-    maxPullPin = 6;
-    maxPushPin = 7;
+    maxPullPin = limit1;
+    maxPushPin = limit2;
     limitOutputs[0] = "No limits reached"; limitOutputs[1] = "maxPull limit reached"; limitOutputs[2] = "maxPush limit reached"; limitOutputs[3] = "Error in limit sensors";
     pinMode(maxPullPin, INPUT);
     pinMode(maxPushPin, INPUT);

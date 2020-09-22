@@ -29,6 +29,7 @@ class SyringeControl
         //Class variables
         SyringeDriver* syringes [5];
         static int incubations [];
+        int syringeCount;
     private:
         //add any pin refs for power management
 

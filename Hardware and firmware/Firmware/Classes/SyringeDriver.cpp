@@ -31,8 +31,9 @@ float volPerStep;
 Stepper *motorReference;
 int maxPull;
 int maxPush;
+int syringeNumber;
 
-SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4, int limit1, int limit2)
+SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4, int limit1, int limit2, SyringeControl controller)
 {
     maxPullPin = limit1;
     maxPushPin = limit2;
@@ -46,6 +47,22 @@ SyringeDriver::SyringeDriver(int in1, int in2, int in3, int in4, int limit1, int
     speed =5; //The speed is in rotations per minute this is set as an arbitrary until more testing is done max speed advised is
     myStepper.setSpeed(speed);
     screwPitch = 2;
+    reference = passStepper(myStepper, controller);
+}
+
+void SyringeDriver::passStepper(Stepper stepper, SyringeControl controlller)
+{
+    if (controller.syringeCount == 0)
+    {
+        syringeNumber = controller.syringeCount;
+        controller.steppers[controller.syringeCount] = stepper;
+        controller.syringeCount = syringeNumber + 1;
+    }else
+    {
+        syringeNumber = controller.syringeCount +1;
+        controller.syringeCount = syringeNumber;
+        controller.stepper[syringeNumber] = stepper;
+    }
 }
 
 void SyringeDriver::setSyringe(int vol, int extension)
@@ -68,7 +85,8 @@ void SyringeDriver::rotateStep(int stepInt)
 {
     //write function to rotate motor the steps specified in the pull direction
     Serial.print("Inside rotateStep(), stepInt set to: "); Serial.println(stepInt);
-    int interval =  62;
+    int interval =  10;
+    Serial.print("Interval set to: "); Serial.println(interval);
     if (stepInt > 0)
     {
         Serial.println("stepInt is greater than 0");
@@ -79,7 +97,8 @@ void SyringeDriver::rotateStep(int stepInt)
             if(tL == 0)
             {
                 Serial.print("testLimits returned 0.");
-                (*motorReference).step(interval);
+                reference.step(interval);
+                Serial.print("Motor move attempted.");
             }else{
                 break;
             }            
@@ -94,7 +113,7 @@ void SyringeDriver::rotateStep(int stepInt)
             if(tL == 0)
             {
                 Serial.print("testLimitsnreturned 0.");
-                (*motorReference).step(-1 *interval);
+                reference.step(-1 *interval);
             }else{
                 break;
             }

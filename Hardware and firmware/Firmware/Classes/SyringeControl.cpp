@@ -11,7 +11,9 @@
 SyringeControl::SyringeControl()
 {
     int incubations [4];
-    SyringeDriver* syringes [5];
+    int syringeCount = 0;
+    SyringeDriver syringes [5];
+    Stepper steppers [5];
 }
 
 

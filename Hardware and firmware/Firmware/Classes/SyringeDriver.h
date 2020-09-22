@@ -16,7 +16,8 @@ class SyringeDriver
 {
     public:
         //Class methods
-        SyringeDriver(int in1, int in2, int in3, int in4, int limit1, int limit2);
+        SyringeDriver(int in1, int in2, int in3, int in4, int limit1, int limit2, SyringeControl controller);
+        void passStepper(Stepper stepper, SyringeControl controller);
         void setSyringe(int vol, int extension);
         int convertToStep(float vol);
         void rotateStep(int step);

@@ -12,21 +12,23 @@ class SyringeDriver
 {
     public:
         //Class methods
-        SyringeDriver();
-        int convertToStep(float vol);
-        void pushStep(int steps);
-        void pullStep(int steps);
-        
-        //Class variables
-        float totalVol;
-        float currentVol;
-        int stepPerTurn;
-        int thread;
-        float volPerStep;
-        int speed;
-        bool power;
+        SyringeDriver(int numberOfSteps, int motorPinOne, int motorPinTwo, int motorPinThree, int motorPinFour);
+        void setSpeed(long newSpeed); //set speed
+        void moveSteps(int numberOfSteps); //move a number of steps
     private:
-        //put pins and multiplexer channels here
+        void step(int thisStep); //step the motor one step
+
+        int direction; //direction of rotation
+        unsigned long stepDelay; //delay between steps, ms
+        int numberOfSteps; //total number of steps the motor can take
+        int stepNumber; //which step the motor is on
+
+        int motorPinOne;
+        int motorPinTwo;
+        int motorPinThree;
+        int motorPinFour;
+
+        unsigned long lastStepTime; //timestamp of last step taken, us
 };
 
 #endif

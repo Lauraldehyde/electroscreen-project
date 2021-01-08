@@ -10,8 +10,8 @@
 
 SyringeControl::SyringeControl()
 {
-    int incubations [4];
-    SyringeDriver syringes [5];
+    //int incubations [4];
+    //SyringeDriver syringes [5];
 }
 
 
@@ -21,7 +21,7 @@ void SyringeControl::addSyringe(SyringeDriver syringe)
         write a function to initialise SyringeDrivers 
         function may need extra inputs for the wiring of the motors
         the multiplexer channel may need to be included
-    */
+    */ 
 }
 
 void SyringeControl::incubate(int minutes)

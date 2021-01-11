@@ -12,11 +12,15 @@ class SyringeDriver
 {
     public:
         //Class methods
-        SyringeDriver(int numberOfSteps, int motorPinOne, int motorPinTwo, int motorPinThree, int motorPinFour);
+        SyringeDriver(int numberOfSteps, int motorPinOne, int motorPinTwo, int motorPinThree, int motorPinFour, int limitOne, int limitTwo);
         void setSpeed(long newSpeed); //set speed
         void moveSteps(int numberOfSteps); //move a number of steps
+        void resetToFull(); //rotate the motor until switchOne is triggered
+        void resetToEmpty(); //rotate the motor until switchTwo is triggered
+        int testLimits(); //Find the state of the switches and return 
     private:
         void step(int thisStep); //step the motor one step
+        
 
         int direction; //direction of rotation
         unsigned long stepDelay; //delay between steps, ms
@@ -27,6 +31,8 @@ class SyringeDriver
         int motorPinTwo;
         int motorPinThree;
         int motorPinFour;
+        int limitOne;
+        int limitTwo;
 
         unsigned long lastStepTime; //timestamp of last step taken, us
 };

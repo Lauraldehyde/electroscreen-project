@@ -7,7 +7,7 @@
 #include "Arduino.h"
 #include "SyringeDriver.h"
 
-SyringeDriver::SyringeDriver(int numberOfSteps, int motorPinOne, int motorPinTwo, int motorPinThree, int motorPinFour)
+SyringeDriver::SyringeDriver(int numberOfSteps, int motorPinOne, int motorPinTwo, int motorPinThree, int motorPinFour, int limitOne, int limitTwo)
 {
     this->stepNumber = 0;
     this->direction = 0;
@@ -18,11 +18,15 @@ SyringeDriver::SyringeDriver(int numberOfSteps, int motorPinOne, int motorPinTwo
     this->motorPinTwo = motorPinTwo;
     this->motorPinThree = motorPinThree;
     this->motorPinFour = motorPinFour;
+    this->limitOne = limitOne;
+    this->limitTwo = limitTwo;
 
     pinMode(this->motorPinOne, OUTPUT);
     pinMode(this->motorPinTwo, OUTPUT);
     pinMode(this->motorPinThree, OUTPUT);
     pinMode(this->motorPinFour, OUTPUT);
+    pinMode(this->limitOne, INPUT);
+    pinMode(this->limitTwo, INPUT);
 
 
 }
@@ -89,4 +93,39 @@ void SyringeDriver::step(int thisStep)
             digitalWrite(motorPinFour, HIGH);
         break;
     }
+}
+
+int SyringeDriver::testLimits()
+{
+    /* function tests whether max push or max pull has been reached
+    Low = switch activated (0), High = not at limit(1)
+    No limits reached: return 0
+    Max pull reached: return 1
+    Max push reached: return 2
+    Both limits triggered (an error) return 3*/
+    int maxPull = digitalRead((int)limitOne);
+    int maxPush = digitalRead((int)limitTwo);
+    if(maxPull==1 && maxPush==1)
+    {
+        return 0;
+    } else if(maxPull == 0 && maxPush == 1)
+    {
+        return 1;
+    } else if (maxPull == 1 && maxPush == 0)
+    {
+        return 2;
+    } else 
+    {
+        return 3;
+    }
+}
+
+void SyringeDriver::resetToFull()
+{
+    //rotate motor until switchOne is triggered
+}
+
+void SyringeDriver::resetToEmpty()
+{
+    //rotate motor until switchTwo is triggered
 }

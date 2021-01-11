@@ -1,5 +1,6 @@
 /*
-    SyringeDriver.h - Library for control of a singular electroscreen syringe driver
+    SyringeDriver.h - Library for control of the motor of a syringe driver
+    Based on code Stepper.h which can be found at https://www.arduino.cc/en/Reference/Stepper
     Created by Laura Moody, 14th July 2020
     University of Portsmouth
 */

@@ -1,5 +1,6 @@
 /*
-    SyringeDriver.cpp - Library for control of a singular electroscreen syringe driver
+    SyringeDriver.cpp - Library for control of the motor of a syringe driver
+    Based on code Stepper.h which can be found at https://www.arduino.cc/en/Reference/Stepper
     Created by Laura Moody, 14th July 2020
     University of Portsmouth
 */
@@ -9,6 +10,7 @@
 
 SyringeDriver::SyringeDriver(int numberOfSteps, int motorPinOne, int motorPinTwo, int motorPinThree, int motorPinFour, int limitOne, int limitTwo)
 {
+    //initialises variables and sets up pins
     this->stepNumber = 0;
     this->direction = 0;
     this->lastStepTime = 0;
@@ -33,11 +35,13 @@ SyringeDriver::SyringeDriver(int numberOfSteps, int motorPinOne, int motorPinTwo
 
 void SyringeDriver::setSpeed(long newSpeed)
 {
+    //sets the rpm of the motor
     this->stepDelay = 60L*1000L*1000L / this->numberOfSteps / newSpeed;
 }
 
 void SyringeDriver::moveSteps(int steps)
 {
+    //moves the motor a number of steps
     int stepsLeft = abs(steps);
     if (steps > 0){this -> direction = 1;}
     if (steps < 0){this -> direction = 0;}
@@ -66,6 +70,7 @@ void SyringeDriver::moveSteps(int steps)
 
 void SyringeDriver::step(int thisStep)
 {
+    //moves the motor one step
     switch(thisStep)
     {
         case 0: //1010
@@ -122,10 +127,36 @@ int SyringeDriver::testLimits()
 
 void SyringeDriver::resetToFull()
 {
-    //rotate motor until switchOne is triggered
+    //rotate motor anticlockwise until switchTwo is triggered and syringe is full
+    int limitResult = testLimits();
+    while(limitResult != 1)
+    {
+        unsigned long now = micros();
+        if(now - this->lastStepTime >= this->stepDelay)
+        {
+            this->lastStepTime = now;
+            if(this->stepNumber == this->numberOfSteps){this->stepNumber = 0;}
+            this->stepNumber++;
+            step(this->stepNumber%4);
+        }
+        limitResult = testLimits();
+    }
 }
 
 void SyringeDriver::resetToEmpty()
 {
-    //rotate motor until switchTwo is triggered
+    //rotate motor clockwise until switchOne is triggered and syringe is emptied
+    int limitResult = testLimits();
+    while(limitResult != 2)
+    {
+        unsigned long now = micros();
+        if(now - this->lastStepTime >= this->stepDelay)
+        {
+            this->lastStepTime = now;
+            if(this->stepNumber == 0){this->stepNumber = this->numberOfSteps;}
+            this->stepNumber--;
+            step(this->stepNumber%4);
+        }
+        limitResult = testLimits();
+    }
 }

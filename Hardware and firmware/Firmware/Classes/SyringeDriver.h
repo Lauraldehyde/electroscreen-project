@@ -19,6 +19,8 @@ class SyringeDriver
         void resetToFull(); //rotate the motor until switchOne is triggered
         void resetToEmpty(); //rotate the motor until switchTwo is triggered
         int testLimits(); //Find the state of the switches and return 
+        void setConversion(float ul); //set uL for each step of syringe
+        void moveVol(int vol); //input volume to be taken up (+ve) or pushed out (-ve) in uL
     private:
         void step(int thisStep); //step the motor one step
         
@@ -34,6 +36,7 @@ class SyringeDriver
         int motorPinFour;
         int limitOne;
         int limitTwo;
+        float uLperStep;
 
         unsigned long lastStepTime; //timestamp of last step taken, us
 };

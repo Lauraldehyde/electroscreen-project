@@ -10,68 +10,79 @@
 
 SyringeControl::SyringeControl()
 {
-    //int incubations [4];
-    //SyringeDriver syringes [5];
+    float oneMlSyringe = 0.069228; //uL in each step
+    float tenMlSyringe = 0.69266; //uL in each step
+    this->sampleMotor.setConversion(oneMlSyringe);
+    this->collectMotor.setConversion(tenMlSyringe);
+    this->washMotor.setConversion(oneMlSyringe);
+    this->antibodyMotor.setConversion(oneMlSyringe);
+    this->testMotor.setConversion(oneMlSyringe);
+    setIncubations(30,2,30,15);
+
 }
 
-
-void SyringeControl::addSyringe(SyringeDriver syringe)
+void SyringeControl::setIncubations(int sample, int wash, int antibody, int test)
 {
-    /* 
-        write a function to initialise SyringeDrivers 
-        function may need extra inputs for the wiring of the motors
-        the multiplexer channel may need to be included
-    */ 
+    this->sampleIncubation = long(sample)*60L*1000L;
+    this->washIncubation = long(wash)*60L*1000L;
+    this->antibodyIncubation = long(antibody)*60L*1000L;
+    this->testIncubation = long(test)*60L*1000L;
 }
 
-void SyringeControl::incubate(int minutes)
+void SyringeControl::setSampleIncubation(int mins)
 {
-    //write function that pauses the code and the machinery for sample or antibody incubation
+    this->sampleIncubation = long(mins)*60L*1000L;
 }
 
-void SyringeControl::powerOn(SyringeDriver syringe)
+void SyringeControl::setWashIncubation(int mins)
 {
-    //check if any other Syringes are on if so turn off
-    //turn the power for this motor on
+    this->washIncubation = long(mins)*60L*1000L;
 }
 
-void SyringeControl::powerOff(SyringeDriver syringe)
+void SyringeControl::setAntibodyIncubation(int mins)
 {
-    //turn the power for the associated motor off
+    this->antibodyIncubation = long(mins)*60L*1000L;
+}
+void SyringeControl::setTestIncubation(int mins)
+{
+    this->testIncubation = long(mins)*60L*1000L;
 }
 
-void SyringeControl::pushVol(SyringeDriver syringe, float vol)
+void SyringeControl::wait(long millis)
 {
-    //turn the power for the associated motor on
-    //rotate the motor an appropriate number of steps to push out the vol
+    unsigned long now = millis();
+    this->lastTimeCall = now;
+    if(now - lastTimeCall < millis)
+    {
+        delay(1000);
+        now = millis();
+    }
 }
 
-void SyringeControl::pullVol(SyringeDriver syringe, float vol)
+void SyringeControl::wash()
 {
-    //turn the power for the associated motor on
-    //rotate the motor an appropriate number of steps to take up the vol
+    this->collectMotor.moveVol(100);
+    for(int n = 0; n<4; n++)
+    {
+        this->washMotor.moveVol(-100);
+        wait(this->washIncubation);
+        this->collectMotor.moveVol(100);
+    }   
+    
 }
 
-void SyringeControl::resetPos(SyringeDriver syringe)
+void SyringeControl::startExp()
 {
-    //turn the power for the associated motor on
-    //rotate the motor an appropriate number of steps until the stop signal is recieved
+    this->sampleMotor.moveVol(-50);
+    wait(this->sampleIncubation);
+    wash();
+    this->antibodyMotor.moveVol(-50);
+    wait(this->antibodyIncubation);
+    wash();
+    this->testMotor.moveVol(-50);
+    wait(this->testIncubation);
 }
 
-void SyringeControl::wash(SyringeDriver push, SyringeDriver collect)
-{
-    //push volume out of push syringe
-    //wait 2 minutes
-    //pull volume out of pull syringe
-    //repeat 3 times
-}
 
-void SyringeControl::preTest()
-{
-    //organise order of syringes and incubations before potentiostat here
-}
 
-void SyringeControl::postTest()
-{
-    //organise order of syringes and incubations after potentiostat here
-}
+

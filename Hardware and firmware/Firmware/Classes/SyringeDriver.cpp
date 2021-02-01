@@ -33,6 +33,11 @@ SyringeDriver::SyringeDriver(int numberOfSteps, int motorPinOne, int motorPinTwo
 
 }
 
+void SyringeDriver::setConversion(float ul)
+{
+    this->uLperStep = ul;
+}
+
 void SyringeDriver::setSpeed(long newSpeed)
 {
     //sets the rpm of the motor
@@ -159,4 +164,10 @@ void SyringeDriver::resetToEmpty()
         }
         limitResult = testLimits();
     }
+}
+
+void SyringeDriver::moveVol(int vol)
+{
+    int steps = vol/this->uLperStep;
+    step(steps);
 }
